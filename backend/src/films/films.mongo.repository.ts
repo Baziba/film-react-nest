@@ -33,6 +33,18 @@ export class FilmsMongoDbRepository implements FilmsRepository {
     };
   }
 
+  async setTakenSeat(filmId: string, sessionId: string, seat: string) {
+    return await this.filmModel.updateOne(
+      {
+        id: filmId,
+        'schedule.id': sessionId,
+      },
+      {
+        $addToSet: { 'schedule.$.taken': seat },
+      },
+    );
+  }
+
   private filmMapper(film: FilmDTO): FilmDTO {
     return {
       id: film.id,
