@@ -1,25 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { FilmsMongoDbRepository } from 'src/films/films.mongo.repository';
-import { ApiListResponse } from './films.repository.interface';
-import { FilmDTO, ScheduleDTO } from './dto/films.dto';
+import { ApiListResponse } from '../repositories/films.repository.interface';
+import { FilmDTO, ScheduleDTO } from '../repositories/films/dto/films.dto';
+import { FilmsPostgresDbRepository } from '../repositories/films/postgres/films.postgres.repository';
+import ScheduleEntity from '../repositories/films/postgres/entities/schedule.entity';
+import FilmEntity from '../repositories/films/postgres/entities/film.entity';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly mongoDBRepository: FilmsMongoDbRepository) {}
+  constructor(
+    private readonly postgresDbRepository: FilmsPostgresDbRepository,
+  ) {}
 
   async findAll(): Promise<ApiListResponse<FilmDTO>> {
-    return this.mongoDBRepository.findAll();
+    return this.postgresDbRepository.findAll();
   }
 
-  async findById(id: string): Promise<FilmDTO | null> {
-    return this.mongoDBRepository.findById(id);
+  async findById(id: string): Promise<FilmEntity | null> {
+    return this.postgresDbRepository.findById(id);
   }
 
-  async findSchedule(id: string): Promise<ApiListResponse<ScheduleDTO>> {
-    return this.mongoDBRepository.findSchedule(id);
+  async findSchedule(filmId: string): Promise<ApiListResponse<ScheduleEntity>> {
+    return this.postgresDbRepository.findSchedule(filmId);
   }
 
-  async setTakenSeat(filmId: string, sessionId: string, seat: string) {
-    return this.mongoDBRepository.setTakenSeat(filmId, sessionId, seat);
+  async findSessionById(id: string): Promise<ScheduleEntity | null> {
+    return this.postgresDbRepository.findSessionById(id);
+  }
+
+  async setTakenSeat(filmId: string, sessionId: string, seats: string[]) {
+    return this.postgresDbRepository.setTakenSeat(filmId, sessionId, seats);
   }
 }

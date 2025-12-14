@@ -1,4 +1,4 @@
-import { FilmDTO, ScheduleDTO } from 'src/films/dto/films.dto';
+import { FilmDTO, ScheduleDTO } from './films/dto/films.dto';
 
 export type ApiListResponse<Type> = {
   total: number;
@@ -7,6 +7,8 @@ export type ApiListResponse<Type> = {
 
 export interface FilmsRepository {
   findAll(): Promise<ApiListResponse<FilmDTO>>;
+
   findById(id: string): Promise<FilmDTO | null>;
+
   findSchedule(filmId: string): Promise<ApiListResponse<ScheduleDTO>>;
 }

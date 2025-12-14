@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { OrderDTO, TicketDTO } from './dto/order.dto';
-import { FilmsService } from 'src/films/films.service';
-import { ApiListResponse } from 'src/films/films.repository.interface';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
+import { OrderDTO, TicketDTO } from '../repositories/order/dto/order.dto';
+import { FilmsService } from '../films/films.service';
+import { ApiListResponse } from '../repositories/films.repository.interface';
 
 @Injectable()
 export class OrderService {
@@ -13,32 +17,29 @@ export class OrderService {
 
     for (const ticket of tickets) {
       const film = await this.filmsService.findById(ticket.film);
-
       if (!film) {
         throw new BadRequestException('Фильм не найден');
       }
 
       const session = film.schedule.find((s) => s.id === ticket.session);
-
       if (!session) {
         throw new BadRequestException('Сеанс не найден');
       }
 
       const seat = `${ticket.row}:${ticket.seat}`;
-
-      const seatIsVacant = session.taken.find((s) => s === seat) === undefined;
-
-      if (!seatIsVacant) {
-        throw new Error('Место уже занято');
+      if (session.taken.includes(seat)) {
+        throw new ConflictException('Место уже занято');
       }
+
+      const taken = [...session.taken, seat];
 
       const seatBooked = await this.filmsService.setTakenSeat(
         film.id,
         session.id,
-        seat,
+        taken,
       );
 
-      if (seatBooked.modifiedCount === 0) {
+      if (!seatBooked) {
         throw new Error('Место уже занято');
       }
 

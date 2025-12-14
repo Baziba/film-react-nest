@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
-import { ApiListResponse, FilmsRepository } from './films.repository.interface';
-import { FilmDTO, ScheduleDTO } from 'src/films/dto/films.dto';
+import {
+  ApiListResponse,
+  FilmsRepository,
+} from '../../films.repository.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { Film, FilmDocument } from 'src/films/schema/films.schema';
+import { FilmDTO, ScheduleDTO } from '../dto/films.dto';
+import { Film, FilmDocument } from './schema/films.schema';
 
 export class FilmsMongoDbRepository implements FilmsRepository {
   constructor(
@@ -34,7 +37,7 @@ export class FilmsMongoDbRepository implements FilmsRepository {
   }
 
   async setTakenSeat(filmId: string, sessionId: string, seat: string) {
-    return await this.filmModel.updateOne(
+    return this.filmModel.updateOne(
       {
         id: filmId,
         'schedule.id': sessionId,

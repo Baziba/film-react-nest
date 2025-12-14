@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ApiListResponse, FilmsRepository } from './films.repository.interface';
-import { FilmDTO, ScheduleDTO } from 'src/films/dto/films.dto';
+import {
+  ApiListResponse,
+  FilmsRepository,
+} from '../../films.repository.interface';
+import { FilmDTO, ScheduleDTO } from '../dto/films.dto';
 
 @Injectable()
 export class FilmsLocalRepository implements FilmsRepository {
