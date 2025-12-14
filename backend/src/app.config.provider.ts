@@ -7,6 +7,11 @@ export const configProvider = {
     database: {
       driver: process.env.DATABASE_DRIVER || 'mongodb',
       url: process.env.DATABASE_URL || 'mongodb://localhost:27017/afisha',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      db_name: process.env.DATABASE_NAME,
     },
   },
 };
@@ -18,4 +23,9 @@ export interface AppConfig {
 export interface AppConfigDatabase {
   driver: string;
   url: string;
+  host?: string;
+  port?: number;
+  username?: string;
+  password?: string;
+  db_name?: string;
 }

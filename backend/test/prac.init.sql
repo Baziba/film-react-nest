@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS films (
+    id VARCHAR(255) PRIMARY KEY,
+    rating FLOAT NOT NULL,
+    director VARCHAR(255) NOT NULL,
+    tags TEXT NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    cover VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    about TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS schedules (
+    id VARCHAR(255) PRIMARY KEY,
+    daytime VARCHAR(255) NOT NULL,
+    hall INTEGER NOT NULL,
+    rows INTEGER NOT NULL,
+    seats INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    taken TEXT NOT NULL DEFAULT '',
+    film_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (film_id) REFERENCES films(id) ON DELETE CASCADE
+);
